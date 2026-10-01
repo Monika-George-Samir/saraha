@@ -1,11 +1,25 @@
 import jwt from 'jsonwebtoken';
+import { env } from '../../config/env.service.js';
 
-// export const generateToken = async(user)=>{
-//     console.log(req.headers.token);
+export const generateToken = (user)=>{
+    let aud;
+    let signature;
+    let refreshSignature;
+    switch (user.role) {
+        case "1":
+            signature = env.adminSignature
+            refreshSignature = env.adminRefreshSignature
+            aud = "admin"
+            break;
+            
+        default:
+            signature = env.userSignature
+            refreshSignature = env.userRefreshSignature
+            aud = "user"
+            break;
+    }
+    let accessToken = jwt.sign({id: user._id}, signature, {expiresIn: "30min", audience: aud})
+    let refreshToken = jwt.sign({id: user._id}, refreshSignature, {expiresIn: "1y", audience: aud})
     
-//     let decodedData = await jwt.verify(req.headers.token, "route")
-//     req.user = decodedData
-//     console.log(req.user);
-    
-//     next()
-// }
+    return {accessToken, refreshToken}
+}

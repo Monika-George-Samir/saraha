@@ -1,4 +1,5 @@
 import { BadRequestException, compareHash, ConflictException, generateHash, NotFoundException } from "../../common/index.js"
+import { generateToken } from "../../common/services/token.service.js"
 import { userModel } from "../../database/model/user.model.js"
 import jwt from "jsonwebtoken"
 
@@ -29,8 +30,8 @@ export const login = async(body)=>{
     let isMatched = await compareHash({plainText: password, hashedText: userData.password})
     
     if(isMatched){
-        let token = jwt.sign({id: userData._id}, "route", {expiresIn: "30min", audience: "user"})
-        return {message: "login successfully", token}
+        let {accessToken, refreshToken} = generateToken(userData)        
+        return {message: "login successfully", accessToken, refreshToken}
     }else{
         return BadRequestException({message: "incorrect password"})
     }
