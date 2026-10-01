@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getUserByID, login, signup } from "./auth.service.js";
+import { generateAccessToken, getUserByID, login, signup } from "./auth.service.js";
 // import { auth } from "../../common/services/token.service.js";
 import { auth } from './../../common/middleware/index.js';
 
@@ -19,6 +19,11 @@ router.post("/login", async(req,res)=>{
 router.get("/get-user-by-id", auth, async(req,res)=>{
     let data = await getUserByID(req.user.id)
     res.json(data)
+})
+
+router.post("/generate-access-token", async(req, res)=>{
+    let accessToken = await generateAccessToken(req.body) 
+    res.json(accessToken)
 })
 
 export default router

@@ -1,5 +1,5 @@
 import { BadRequestException, compareHash, ConflictException, generateHash, NotFoundException } from "../../common/index.js"
-import { generateToken } from "../../common/services/token.service.js"
+import { generateToken, generateNewAccessToken } from "../../common/services/token.service.js"
 import { userModel } from "../../database/model/user.model.js"
 import jwt from "jsonwebtoken"
 
@@ -41,4 +41,15 @@ export const login = async(body)=>{
 export const getUserByID = async(id)=>{
     let userData = await userModel.findById(id)
     return userData
+}
+
+
+export const generateAccessToken = (body)=>{
+    let {refreshToken} = body
+    let {accessToken} = generateNewAccessToken(refreshToken)
+    if (accessToken) {
+        return {accessToken}
+    }else{
+        throw BadRequestException({message: "invalid token"})
+    }
 }
