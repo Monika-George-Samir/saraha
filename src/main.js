@@ -13,7 +13,8 @@ app.use((err, req, res, next)=>{
     // console.log(err, err.cause.status);
     let stack = env.mood == "dev" ? err.stack : null
     let status = err.cause ? err.cause.status : 500
-    res.status(status).json({message: err.message, stack})
+    let extra = err.cause ? err.cause.extra : null
+    res.status(status).json({message: err.message, stack, extra})
 })
 
 
