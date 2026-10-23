@@ -48,6 +48,9 @@ const userSchema = new Schema({
     isVerified: {
         type: Boolean,
         default: false
+    },
+    DOB: {
+       type: Date 
     }
 },{
     timestamps: true
