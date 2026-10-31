@@ -2,6 +2,7 @@ import express, { json } from "express"
 import { env } from "./config/env.service.js"
 import { databaseConnection } from "./database/connection.js"
 import authRouter from "./module/auth/auth.controller.js"
+import messageRouter from "./module/message/message.controller.js"
 import { fileURLToPath } from 'url';
 import path from "path";
 import { redisConnection } from "./database/redis/connection.js";
@@ -16,6 +17,7 @@ databaseConnection()
 
 app.use(json())
 app.use("/auth", authRouter)
+app.use("/messages", messageRouter)
 
 
 app.use("/uploads", express.static(uploadPath))

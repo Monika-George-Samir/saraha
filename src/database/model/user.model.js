@@ -18,11 +18,11 @@ const userSchema = new Schema({
     },
     password: {
         type: String,
-        // required: true,
+        required: true,
     },
     age: {
         type: Number,
-        required: true,
+        // required: true,
     },
     gender: {
         type: String,
@@ -51,6 +51,14 @@ const userSchema = new Schema({
     },
     DOB: {
        type: Date 
+    },
+    uniqueName: {
+        type: String,
+        required: true,
+        unique: true
+    },
+    url: {
+        type: String,
     }
 },{
     timestamps: true

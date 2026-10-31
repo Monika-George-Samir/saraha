@@ -5,8 +5,9 @@ import { userModel } from "../../database/model/user.model.js"
 import { get, set } from "../../database/redis/redis.service.js"
 
 export const signup = async(body, file)=>{
-    let {userName, email, password, confirmPassword, age, gender} = body
+    let {userName, email, password, confirmPassword, age, gender, uniqueName} = body
     let profileImage;
+    let url;
     if (password !== confirmPassword) {
         return BadRequestException({message: "password and confirm password don't match"})
     }
@@ -17,10 +18,15 @@ export const signup = async(body, file)=>{
     if (existedEmail) {
         return ConflictException({message: "Email already exists"})
     }else{
+        let existedUniqueName = await userModel.findOne({uniqueName})
+        if (existedUniqueName) {
+            ConflictException({message: "Unique name already exists"})
+        }
         let hashedPassword = await generateHash({plainText: password})
         if (hashedPassword) {
             let otp = Math.round(Math.random() * 1000000)
-            let addedUser = await userModel.create({userName, email, password: hashedPassword, age, gender, profileImage})
+            url = `https://saraha/${uniqueName}`
+            let addedUser = await userModel.create({userName, email, password: hashedPassword, age, gender, profileImage, uniqueName, url})
             set(`otp::${addedUser._id}`, otp, 180)
             console.log(`otp::${addedUser._id}`);
             

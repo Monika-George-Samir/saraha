@@ -2,6 +2,9 @@ import jwt from 'jsonwebtoken';
 import { env } from '../../config/env.service.js';
 import { BadRequestException } from '../exceptions/error.exception.js';
 export const auth = (req, res, next)=>{
+    if (!req.headers.authorization) {
+        return BadRequestException({message: "Token not provided"})
+    }
     let [flag, token] = req.headers.authorization.split(" ")
     switch (flag) {
         case "Basic":
