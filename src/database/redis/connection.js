@@ -1,8 +1,9 @@
 import { createClient } from "redis"
+import { env } from "../../config/env.service.js";
 
 export const redisConnection = async()=>{
     const client = createClient({
-    url: "rediss://default:gQAAAAAAAucvAAIgcDIwMGNiYjU4NmExMjA0YjYxOGY5N2Q0ZWY3ZDNjNjNjMQ@light-monarch-190255.upstash.io:6379"
+    url: env.redisURI
     });
 
     client.on("error", function(err) {
