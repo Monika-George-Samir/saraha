@@ -6,6 +6,7 @@ import messageRouter from "./module/message/message.controller.js"
 import { fileURLToPath } from 'url';
 import path from "path";
 import { redisConnection } from "./database/redis/connection.js";
+import { successResponse } from "./common/exceptions/success.response.js"
 
 const app = express()
 const __filename = fileURLToPath(import.meta.url)
@@ -19,6 +20,10 @@ app.use(json())
 app.use("/auth", authRouter)
 app.use("/messages", messageRouter)
 
+
+app.get("/", (req, res)=>{
+    successResponse({res, message: "welcome to saraha app"})
+})
 
 app.use("/uploads", express.static(uploadPath))
 
