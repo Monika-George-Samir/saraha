@@ -3,6 +3,9 @@ import { env } from "./config/env.service.js"
 import { databaseConnection } from "./database/connection.js"
 import authRouter from "./module/auth/auth.controller.js"
 import messageRouter from "./module/message/message.controller.js"
+import requestRouter from "./module/request/request.controller.js"
+import conversationRouter from "./module/conversation/conversation.controller.js"
+import chatMessageRouter from "./module/chatMessage/chatMessage.controller.js"
 import { fileURLToPath } from 'url';
 import path from "path";
 import { redisConnection } from "./database/redis/connection.js";
@@ -19,6 +22,9 @@ databaseConnection()
 app.use(json())
 app.use("/auth", authRouter)
 app.use("/messages", messageRouter)
+app.use("/requests", requestRouter)
+app.use("/conversation", conversationRouter)
+app.use("/chatMessages", chatMessageRouter)
 
 
 app.get("/", (req, res)=>{

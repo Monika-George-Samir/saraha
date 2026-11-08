@@ -4,6 +4,7 @@ import { successResponse } from "../../common/exceptions/success.response.js";
 import { auth } from "../../common/middleware/auth.middleware.js";
 import { checkRole } from "../../common/middleware/checkRole.middleware.js";
 import { upload } from "../../common/middleware/multer.js";
+import { optionalAuth } from "../../common/middleware/optionalAuth.middleware.js";
 
 
 const router = Router()
@@ -14,8 +15,8 @@ router.get("/get-all-messages", auth, checkRole(["1"]), async (req, res)=>{
 })
 
 
-router.post("/send-message", upload().single("image"), async(req, res)=>{
-    let data = await sendMessage(req.body, req.file)
+router.post("/send-message", upload().single("image"), optionalAuth, async(req, res)=>{
+    let data = await sendMessage(req.body, req.file, req.user)
     successResponse({res, message:"Message sent", status: 201, data})
 })
 

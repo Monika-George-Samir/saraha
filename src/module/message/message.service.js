@@ -15,8 +15,10 @@ export const getAllMessages = async()=>{
 }
 
 
-export const sendMessage = async(body, file)=>{
+export const sendMessage = async(body, file, user)=>{
     let {content, receiverId} = body;
+    let senderId = user?.id || null
+    
     let messageImage;
 
     let existedUser = await userModel.findById(receiverId)
@@ -28,11 +30,12 @@ export const sendMessage = async(body, file)=>{
         messageImage = file.path
     }
 
-    let addedMessage = await messageModel.insertOne({content, receiverId, messageImage})
+    let addedMessage = await messageModel.insertOne({content, receiverId, image: messageImage, senderId})
     if (!addedMessage) {
         return BadRequestException({message: "Message not sent"})
     }
-    return addedMessage
+    let responseMessage = await messageModel.findById(addedMessage._id).select("-senderId");
+    return responseMessage
 }
 
 
